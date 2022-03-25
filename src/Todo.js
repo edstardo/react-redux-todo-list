@@ -1,79 +1,36 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
-
-class BasicCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      description: this.props.description,
-      deadline: this.props.deadline
-    }
-  }
-
-  componentDidMount() {
-    // console.log(this.state.deadline);
-  }
-
-  render() {
-    return (
-      <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          
-          <Typography variant="h5" component="div">
-            {this.state.description}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Deadline: {this.state.deadline.toString()}
-          </Typography>
-          {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            adjective
-          </Typography> */}
-          {/* <Typography variant="body2">
-            well meaning and kindly.
-            <br />
-            {'"a benevolent smile"'}
-          </Typography> */}
-        </CardContent>
-        <CardActions>
-          <Button size="small">Done</Button>
-          <Button size="small">Delete</Button>
-        </CardActions>
-      </Card>
-    )
-  }
+function BasicCard(props) {
+  return (
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          {props.description}
+        </Typography>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Deadline: {props.deadline.toString()}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Done</Button>
+        <Button onClick={() => props.deleteTodoHandler(props.id)} size="small">Delete</Button>
+      </CardActions>
+    </Card>
+  );
 }
 
-class TodoCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      description: this.props.todo.description,
-      deadline: this.props.todo.deadline
-    };
-  }
-
-  render() {
-    return (
-      <BasicCard
-        description={this.state.description}
-        deadline={this.state.deadline}
-      />
-    );
-  }
+export default function Todo(props) {
+  return (
+    <BasicCard
+      id={props.todo.id}
+      description={props.todo.description}
+      deadline={props.todo.deadline}
+      deleteTodoHandler={props.deleteTodoHandler}
+    />
+  );
 }
-
-export default TodoCard;
