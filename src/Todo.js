@@ -17,8 +17,7 @@ function BasicCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Done</Button>
-        <Button onClick={() => props.deleteTodoHandler(props.id)} size="small">Delete</Button>
+        <Button onClick={() => props.deleteTodoHandler(props.id)} size="small">Done</Button>
       </CardActions>
     </Card>
   );
