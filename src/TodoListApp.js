@@ -43,8 +43,8 @@ class TodoListApp extends React.Component {
               {
                 this.state.todos.map((todo, i) => {
                   return (
-                    <Grid item md={4}>
-                      <Todo key={"todo-id-"+i.toString() } todo={todo} deleteTodoHandler={this.deleteTodoHandler}/>
+                    <Grid key={"todo-id-"+i.toString()} item md={4}>
+                      <Todo todo={todo} deleteTodoHandler={this.deleteTodoHandler}/>
                     </Grid>
                   );
                 })
