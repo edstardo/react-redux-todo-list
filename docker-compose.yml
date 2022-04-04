@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  web:
+    depends_on:
+      - db
+    build:
+      context: webapp
+    container_name: todolist-webapp
+    hostname: todolist-webapp
+    networks:
+      - todolist-network
+    ports:
+      - "3000:3000"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - ./webapp:/code
+
+  db:
+    image: postgres:latest
+    container_name: todolist-pgdb
+    networks:
+      - todolist-network
+    environment: 
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=todolist
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: todolist-pgadmin
+    networks:
+      - todolist-network
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@todolist.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+    restart: always
+    volumes:
+      - pgadmin-data:/root/.pgadmin
+
+volumes:
+  db-data:
+  pgadmin-data:
+
+networks:
+  todolist-network:
+    driver: bridge
