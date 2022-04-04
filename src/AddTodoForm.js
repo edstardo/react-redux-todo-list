@@ -31,7 +31,7 @@ export default function AddTodoForm(props) {
       <TextField
         id="new-todo-description-field"
         label="Todo Description"
-        defaultValue=""
+        // defaultValue=""
         size="small"
         value={description}
         onChange={(event) => (setDescription(event.target.value))}
