@@ -4,12 +4,11 @@ services:
   web:
     depends_on:
       - db
+      - api
     build:
       context: webapp
-    container_name: todolist-webapp
     hostname: todolist-webapp
-    networks:
-      - todolist-network
+    stdin_open: true
     ports:
       - "3000:3000"
     deploy:
@@ -17,12 +16,27 @@ services:
         condition: on-failure
     volumes:
       - ./webapp:/code
+    networks:
+      - todolist-network
+
+  api:
+    depends_on:
+      - db
+    build:
+      context: api
+    hostname: todolist-api
+    ports:
+      - "8080:8080"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - ./api:/code
+    networks:
+      - todolist-network
 
   db:
     image: postgres:latest
-    container_name: todolist-pgdb
-    networks:
-      - todolist-network
     environment: 
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -32,12 +46,11 @@ services:
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data/
+    networks:
+      - todolist-network
       
   pgadmin:
     image: dpage/pgadmin4
-    container_name: todolist-pgadmin
-    networks:
-      - todolist-network
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@todolist.com
       - PGADMIN_DEFAULT_PASSWORD=password
@@ -47,6 +60,8 @@ services:
     restart: always
     volumes:
       - pgadmin-data:/root/.pgadmin
+    networks:
+      - todolist-network
 
 volumes:
   db-data:
