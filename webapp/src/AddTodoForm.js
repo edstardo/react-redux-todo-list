@@ -5,8 +5,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 
-const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-
 export default function AddTodoForm(props) {
   const [description, setDescription] = useState(""); 
   const [deadline, setDeadline] = useState(null);
@@ -17,7 +15,6 @@ export default function AddTodoForm(props) {
     }
 
     props.addTodoHandler({
-      id: genRanHex(6),
       description: description,
       deadline: deadline,
     });

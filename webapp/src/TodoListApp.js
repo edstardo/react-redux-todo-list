@@ -16,21 +16,72 @@ class TodoListApp extends React.Component {
       this.addTodoHandler = this.addTodoHandler.bind(this);
       this.deleteTodoHandler = this.deleteTodoHandler.bind(this);
     }
-  
-    addTodoHandler(newTodo) {
-      this.setState(prevState => ({
-        todos: [...prevState.todos, newTodo]
-      }))
+
+    componentDidMount() {
+      this.fetchTodos()
     }
 
-    deleteTodoHandler(toID) {
-      var filtered = this.state.todos.filter(function(value, index, arr){ 
-        return value.id !== toID;
-      });
-
-      this.setState({
-        todos: [...filtered]
+    fetchTodos() {
+      fetch("http://127.0.0.1:8080/todos")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            todos: result
+          });
+        },
+        (error) => {
+          console.log("Error occured while fetching todos: ", error)
+        }
+      )
+    }
+  
+    addTodoHandler(newTodo) {
+      fetch("http://127.0.0.1:8080/todos", {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({description: newTodo.description, deadline: newTodo.deadline})
       })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          newTodo.id = result.id;
+          this.setState( prevState => {
+            return {
+              todos: [...prevState.todos, newTodo]
+            }
+          })
+        },
+        (error) => {
+          console.log("Error occured while creating new todo: ", error)
+        }
+      )
+    }
+
+    deleteTodoHandler(todoID) {
+      
+      fetch("http://127.0.0.1:8080/todos/" + todoID, {
+        method: 'DELETE', 
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(
+        (result) => {
+          var filtered = this.state.todos.filter(function(value, index, arr){ 
+            return value.id !== todoID;
+          });
+
+          this.setState({
+            todos: [...filtered]
+          })
+        },
+        (error) => {
+          console.log("Error occured while deleting todo: ", error)
+        }
+      )
     }
   
     render() {
